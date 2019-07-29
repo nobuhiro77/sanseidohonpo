@@ -1,4 +1,4 @@
-import './all.sass'
+import '../components/all.sass'
 import React from 'react'
 import { Link, graphql } from 'gatsby'
 import { Keyframes, animated } from 'react-spring/renderprops'
