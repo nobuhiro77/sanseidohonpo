@@ -29,7 +29,7 @@ exports.createPages = ({ actions, graphql }) => {
       return Promise.reject(result.errors)
     }
 
-    const posts = result.data.allMarkdownRemark.edges
+    const posts = result.data.allMarkdownRemark.edges.filter(edge => edge.node.frontmatter.templateKey === 'index-page' )
 
     posts.forEach(edge => {
       const id = edge.node.id
@@ -45,7 +45,7 @@ exports.createPages = ({ actions, graphql }) => {
         },
       })
     })
-
+    /*
     // Tag pages:
     let tags = []
     // Iterate through each post, putting all found tags into `tags`
@@ -56,7 +56,9 @@ exports.createPages = ({ actions, graphql }) => {
     })
     // Eliminate duplicate tags
     tags = _.uniq(tags)
+    */
 
+    /*
     // Make tag pages
     tags.forEach(tag => {
       const tagPath = `/tags/${_.kebabCase(tag)}/`
@@ -69,6 +71,7 @@ exports.createPages = ({ actions, graphql }) => {
         },
       })
     })
+    */
   })
 }
 

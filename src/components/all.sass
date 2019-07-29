@@ -1,140 +1,105 @@
-@import "~bulma/sass/utilities/initial-variables"
-
-// Config vars
-// Kaldi logo brand color: #FD461E
-$kaldi-red: #D64000
-$kaldi-red-invert: #fff
-
-$primary: $kaldi-red
-$primary-invert: $kaldi-red-invert
-$body-color: #333
-$black: #2b2523
-
-.navbar .navbar-menu
-  box-shadow:none !important
-
-.content .taglist
-  list-style: none
-  margin-bottom: 0
-  margin-left: 0
-  margin-right: 1.5rem
-  margin-top: 1.5rem
+body
+  margin: 0
+  
+.section
   display: flex
-  flex-wrap: wrap
-  justify-content: left
-  align-items: center
-  li
-    padding: 0 2rem 1rem 0
-    margin-bottom: 1.5rem
-    margin-top: 0
+  justify-content: flex-start
+  align-content: center
 
-// Helper Classes
-.full-width-image-container
-  width: 100vw
-  height: 400px
-  position: relative
-  left: 50%
-  right: 50%
-  margin: 2em -50vw
-  background-size: cover
-  background-position: bottom
-  display: flex
-  justify-content: center
-  align-items: center
-
-.full-width-image
-    width: 100vw
-    height: 400px
+  .left
+    height: calc(100vh)
+    width: 50%
     background-size: cover
-    background-position: bottom
+    opacity: 1
+
+    .texture
+      height: calc(100vh)
+      width: 100%
+      opacity: 0.1
+
+  .right  
     display: flex
+    width: 50%
+    height: calc(100vh)
     justify-content: center
     align-items: center
 
-.btn
-    display: inline-block
-    padding: 12px 16px 10px
-    font-size: 18px
-    font-size: 1rem
-    line-height: 1.25
-    background-color: #fff
-    border-radius: .25rem
-    text-decoration: none
-    font-weight: 700
-    color: #CC3700
-    text-align: center
-    -webkit-box-shadow: inset 0 0 0 2px #CC3700
-    box-shadow: inset 0 0 0 2px #f40
-    -webkit-transition: all .15s ease
-    transition: all .15s ease
+    .title
+      font-weight: 800
+      font-size: 2em
+    
+    .typography
+      overflow: hidden
+      
 
-.margin-top-0
-  margin-top: 0 !important
-
-.navbar-item .icon
-  color: $primary
-// Override for use of svg's from https://simpleicons.org/
-.icon svg
-  width: 1.5rem
-  height: 1.5rem
-  fill: currentColor
-.navbar-brand .navbar-item.logo
-  padding: 0 1rem
-footer.footer
-  padding: 3rem 0rem 0rem
-  background-color: transparent
-
-//Menu overrides
-$menu-item-color: $white-ter
-$menu-item-hover-color: $black !important
-$menu-item-hover-background-color: $black
-$menu-item-active-color: $kaldi-red-invert
-$menu-item-active-background-color:	$kaldi-red-invert
-$menu-list-border-left: 1px solid $kaldi-red-invert
-$menu-label-color: $white-ter
+#scroll-wrapper
+  width: 100vw
+  height: 100vh
+  overflow-y: scroll
+  position: relative
+  dispaly: 'flex'
 
 
-.menu-label
-  font-size: 1em !important
-  text-align: left
-.menu-list
-  list-style: none !important
-  text-align: left
-.social
-  padding: 2em
-.social a
-    padding: .5em .5em .3em .5em
-    border-radius: 1em
-    background-color: $white-ter
-    margin: .5em
-    width: 1em
-    height: 1em
-    vertical-align: middle
-    display: inline
+.menu-open-button-box
+  position: fixed
+  top: 16px
+  right: 32px
+  width: 40px
+  height: 40px
+  padding: 8px
+  border-radius: 32px
+  display: flex
+  justify-content: center
+  align-items: center
+  background-color: white
+  cursor: pointer
+  z-index: 10
+  color: grey
 
-// blog roll
-.blog-list-item.is-featured
-  background-color: #d6400033;
-.blog-list-item header
-  display: flex;
-  margin-bottom: 1em;
-.blog-list-item .featured-thumbnail
-  flex-basis: 35%;
-  margin: 0 1.5em 0 0;
+.menu-close-button-box
+  position: absolute
+  top: 16px
+  right: 16px
+  width: 40px
+  height: 40px
+  padding: 16px
+  margin: 16px
+  border-radius: 8px
+  display: flex
+  justify-content: center
+  align-items: center
+  color: white
+  cursor: pointer
 
+.menubar
+  position: fixed
+  top: 0
+  right: 0
+  height: 100vh
+  width: 100vw
+  background-color: grey
+  z-index: 20
+  color: white
+  display: flex
+  justify-content: center
+  align-items: center
+  
+  .logo
+    height: 80px
+    display: flex
+    align-items: center
+    justify-content: center
+    cursor: pointer
 
-@import "~bulma"
+  .menu-item-box
+    max-width: 200px;
 
+  .menu-item
+    margin: 24px
+    cursor: pointer
+    overflow: hidden
 
-// responsiveness
-+tablet-only
-  .blog-list-item .featured-thumbnail
-    flex-basis: 50%;
-
-+mobile
-  .blog-list-item header
-    display: block
-  .blog-list-item .featured-thumbnail
-    text-align: center;
-    max-width: 70%;
-    margin: 0 0 1em;
+.content
+  position: absolute
+  width: 100vw
+  height: 100vh
