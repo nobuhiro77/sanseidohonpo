@@ -1,11 +1,10 @@
 import '../components/all.sass'
 import React from 'react'
-import { Link, graphql } from 'gatsby'
+import { graphql } from 'gatsby'
 import { Keyframes, animated } from 'react-spring/renderprops'
 import texture from '../img/line-texture-bg-overlay.svg'
-import { Transition } from 'react-spring/renderprops'
 import { Menu, Close } from '@material-ui/icons'
-import { IconButton, Typography, Grid } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 
 const MenuBarAnimation = Keyframes.Spring({
   open: { delay: 0, x: 100 },
@@ -140,6 +139,7 @@ export class IndexPageTemplate extends React.Component
     menubar: 'close',
     menuItems: 'close',
     section: undefined,
+    touchStart: undefined,
   }
 
   smoothScroll = (range, component, collback) => {
@@ -178,18 +178,49 @@ export class IndexPageTemplate extends React.Component
     if (scrollWrapper === null) {
       return
     }
-    scrollWrapper.onscroll = (event) => {
-      return false
+    scrollWrapper.ontouchstart = (event) => {
+      if (this.state.scroll === true) {
+        event.preventDefault()
+        return
+      }
+      this.setState({ touchStart: event.touches[0].pageY })
+    }
+    scrollWrapper.ontouchmove = (event) => {
+      if (this.state.scroll === true || this.state.touchStart === undefined) {
+        event.preventDefault()
+        return
+      }
+      if (this.state.touchStart + 10 < event.touches[0].pageY) {
+        let diff = 0 === scrollWrapper.scrollTop % window.innerHeight ? window.innerHeight : scrollWrapper.scrollTop % window.innerHeight
+        let section = (scrollWrapper.scrollTop - diff) / window.innerHeight
+        section = section === -1 ? 0 : section === 3 ? 2 : section
+        this.setState({ scroll: true, touchStart: undefined, section })
+        this.smoothScroll(- diff, scrollWrapper, () => {
+            this.setState({ scroll: false })
+        })
+      }
+      else if (this.state.touchStart - 10 > event.touches[0].pageY) {
+        let section = (scrollWrapper.scrollTop + window.innerHeight - scrollWrapper.scrollTop % window.innerHeight) / window.innerHeight
+        this.setState({ scroll: true, touchStart: undefined, section })
+        this.smoothScroll(window.innerHeight - scrollWrapper.scrollTop % window.innerHeight, scrollWrapper, () => {
+          this.setState({ scroll: false })
+        })
+      }
+    }
+    scrollWrapper.ontouchend = (event) => {
+      if (this.state.scroll === true) {
+        event.preventDefault()
+        return
+      }
     }
     scrollWrapper.onwheel = (event) => {
       event.preventDefault()
       if (this.state.scroll === true) {
         return
       }
-      this.setState({ scroll: true })
       if (event.deltaY > 0) {
         let section = (scrollWrapper.scrollTop + window.innerHeight - scrollWrapper.scrollTop % window.innerHeight) / window.innerHeight
-        this.setState({ section })
+        this.setState({ scroll: true, section })
         this.smoothScroll(window.innerHeight - scrollWrapper.scrollTop % window.innerHeight, scrollWrapper, () => {
           this.setState({ scroll: false })
         })
@@ -198,7 +229,7 @@ export class IndexPageTemplate extends React.Component
         let diff = 0 === scrollWrapper.scrollTop % window.innerHeight ? window.innerHeight : scrollWrapper.scrollTop % window.innerHeight
         let section = (scrollWrapper.scrollTop - diff) / window.innerHeight
         section = section === -1 ? 0 : section === 3 ? 2 : section
-        this.setState({ section })
+        this.setState({ scroll: true, section })
         this.smoothScroll(- diff, scrollWrapper, () => {
             this.setState({ scroll: false })
         })
