@@ -45,6 +45,7 @@ const Menubar = (props) => {
       className="menubar"
       style={{
         right: x.interpolate(x => `calc(-100vw + ${x}vw)`),
+        height: window.innerHeight
       }}
     >
       <div className='menu-close-button-box' onClick={onClickMenubar}>
@@ -95,18 +96,27 @@ const Section = (props) => {
             className='left'
             style={{
               opacity: opacity.interpolate(opacity => opacity),
+              height: window.innerHeight,
               backgroundImage: `url(${image.childImageSharp.fluid.src})`
             }}
           >
             <div
               className='texture'
-              style={{ background: `url(${texture}) 8px/8px auto repeat` }}
+              style={{
+                background: `url(${texture}) 8px/8px auto repeat`,
+                height: window.innerHeight,
+              }}
             >
             </div>
           </animated.div>
         )}
       </BackgroundImageAnimation>
-      <div className='right'>
+      <div
+        className='right'
+        style={{
+          height: window.innerHeight
+        }}
+      >
         <div>
           <TypographyAnimation
             native
@@ -177,6 +187,11 @@ export class IndexPageTemplate extends React.Component
     var scrollWrapper = document.getElementById('scroll-wrapper')
     if (scrollWrapper === null) {
       return
+    }
+    scrollWrapper.onscroll = (event) => {
+      if (this.state.touchStart !== undefined) {
+        event.preventDefault()
+      }
     }
     scrollWrapper.ontouchstart = (event) => {
       if (this.state.scroll === true) {
@@ -259,7 +274,10 @@ export class IndexPageTemplate extends React.Component
     ]
     return (
       <React.Fragment>
-        <div id='scroll-wrapper'>
+        <div
+          id='scroll-wrapper'
+          style={{ height: window.innerHeight }}
+        >
         <MenuBarAnimation native state={menubar}>
           {({ x }) => (
             <React.Fragment>
@@ -268,6 +286,7 @@ export class IndexPageTemplate extends React.Component
                 className='content'
                 style={{
                   right: x.interpolate(x => `calc(${x / 2}vw)`),
+                  height: window.innerHeight
                 }}
               >
                 <div className='menu-open-button-box' onClick={this.handleClickMenubar}>
