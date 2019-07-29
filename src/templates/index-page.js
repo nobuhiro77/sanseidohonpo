@@ -149,6 +149,7 @@ export class IndexPageTemplate extends React.Component
     menubar: 'close',
     menuItems: 'close',
     section: undefined,
+    scroll: false,
     touchStart: undefined,
     windowHeight: undefined,
   }
@@ -190,7 +191,7 @@ export class IndexPageTemplate extends React.Component
       return
     }
     scrollWrapper.onscroll = (event) => {
-      if (this.state.touchStart !== undefined) {
+      if (this.state.touchStart !== undefined || this.state.scroll === false) {
         event.preventDefault()
       }
     }
@@ -252,6 +253,7 @@ export class IndexPageTemplate extends React.Component
       }
     }
     window.onresize = (event) => {
+      console.dir(window.innerHeight)
       this.setState({ windowHeight: window.innerHeight })
     }
     console.dir(window.innerHeight)
