@@ -39,13 +39,13 @@ const Menubar = (props) => {
   const items = menuItemsProps.map(menuItemProp => (
     <Typography variant='h6' color='inherit' align='left'>{menuItemProp.label}</Typography>
   ))
-  const { x, menuItems, onClickMenubar } = props
+  const { x, menuItems, onClickMenubar, windowHeight } = props
   return (
     <animated.div
       className="menubar"
       style={{
         right: x.interpolate(x => `calc(-100vw + ${x}vw)`),
-        height: window.innerHeight
+        height: windowHeight
       }}
     >
       <div className='menu-close-button-box' onClick={onClickMenubar}>
@@ -87,7 +87,7 @@ const Menubar = (props) => {
 }
 
 const Section = (props) => {
-  const { section, currentSection, image, typographyItems } = props
+  const { section, currentSection, image, typographyItems, windowHeight } = props
   return (
     <div className='section'>
       <BackgroundImageAnimation native state={currentSection === undefined && section === 0 ? 'peek' : currentSection === section ? 'open' : 'close'}>
@@ -96,7 +96,7 @@ const Section = (props) => {
             className='left'
             style={{
               opacity: opacity.interpolate(opacity => opacity),
-              height: window.innerHeight,
+              height: windowHeight,
               backgroundImage: `url(${image.childImageSharp.fluid.src})`
             }}
           >
@@ -104,7 +104,7 @@ const Section = (props) => {
               className='texture'
               style={{
                 background: `url(${texture}) 8px/8px auto repeat`,
-                height: window.innerHeight,
+                height: windowHeight,
               }}
             >
             </div>
@@ -114,7 +114,7 @@ const Section = (props) => {
       <div
         className='right'
         style={{
-          height: window.innerHeight
+          height: windowHeight
         }}
       >
         <div>
@@ -150,6 +150,7 @@ export class IndexPageTemplate extends React.Component
     menuItems: 'close',
     section: undefined,
     touchStart: undefined,
+    windowHeight: undefined,
   }
 
   smoothScroll = (range, component, collback) => {
@@ -250,6 +251,11 @@ export class IndexPageTemplate extends React.Component
         })
       }
     }
+    window.onresize = (event) => {
+      this.setState({ windowHeight: window.innerHeight })
+    }
+    console.dir(window.innerHeight)
+    this.setState({ windowHeight: window.innerHeight })
   }
 
   handleClickMenubar = () => {
@@ -262,7 +268,7 @@ export class IndexPageTemplate extends React.Component
   }
 
   render() {
-    const { menubar, menuItems, section } = this.state
+    const { menubar, menuItems, section, windowHeight } = this.state
     const { image1, image2, image3 } = this.props
     const typographyItems = [
       (
@@ -276,17 +282,17 @@ export class IndexPageTemplate extends React.Component
       <React.Fragment>
         <div
           id='scroll-wrapper'
-          style={{ height: window.innerHeight }}
+          style={{ height: windowHeight }}
         >
         <MenuBarAnimation native state={menubar}>
           {({ x }) => (
             <React.Fragment>
-              <Menubar x={x} menuItems={menuItems} onClickMenubar={this.handleClickMenubar}/>
+              <Menubar x={x} menuItems={menuItems} onClickMenubar={this.handleClickMenubar} windowHeight={windowHeight}/>
               <animated.div
                 className='content'
                 style={{
                   right: x.interpolate(x => `calc(${x / 2}vw)`),
-                  height: window.innerHeight
+                  height: windowHeight
                 }}
               >
                 <div className='menu-open-button-box' onClick={this.handleClickMenubar}>
@@ -297,18 +303,21 @@ export class IndexPageTemplate extends React.Component
                   currentSection={section}
                   image={image1}
                   typographyItems={typographyItems}
+                  windowHeight={windowHeight}
                 />
                 <Section
                   section={1}
                   currentSection={section}
                   image={image2}
                   typographyItems={typographyItems}
+                  windowHeight={windowHeight}
                 />
                 <Section
                   section={2}
                   currentSection={section}
                   image={image3}
                   typographyItems={typographyItems}
+                  windowHeight={windowHeight}
                 />
               </animated.div>
             </React.Fragment>
