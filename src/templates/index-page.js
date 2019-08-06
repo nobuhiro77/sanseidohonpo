@@ -110,7 +110,7 @@ const Section = (props) => {
             className='left'
             style={{
               opacity: opacity.interpolate(opacity => opacity),
-              height: windowHeight,
+              height: windowHeight -64,
               backgroundImage: `url(${image.childImageSharp.fluid.src})`
             }}
           >
@@ -118,7 +118,7 @@ const Section = (props) => {
               className='texture'
               style={{
                 background: `url(${texture}) 8px/8px auto repeat`,
-                height: windowHeight,
+                height: windowHeight - 64,
               }}
             >
             </div>
@@ -128,7 +128,7 @@ const Section = (props) => {
       <div
         className='right'
         style={{
-          height: windowHeight
+          height: windowHeight - 64
         }}
       >
         <div>
@@ -221,8 +221,8 @@ export class IndexPageTemplate extends React.Component
         return
       }
       if (this.state.touchStart + 10 < event.touches[0].pageY) {
-        let diff = 0 === scrollWrapper.scrollTop % window.innerHeight ? window.innerHeight : scrollWrapper.scrollTop % window.innerHeight
-        let section = (scrollWrapper.scrollTop - diff) / window.innerHeight
+        let diff = 0 === scrollWrapper.scrollTop % ( window.innerHeight - 64 ) ? ( window.innerHeight - 64 ) : scrollWrapper.scrollTop % ( window.innerHeight - 64 )
+        let section = (scrollWrapper.scrollTop - diff) / ( window.innerHeight - 64 )
         section = section === -1 ? 0 : section === 3 ? 2 : section
         this.setState({ scroll: true, touchStart: undefined, section })
         this.smoothScroll(- diff, scrollWrapper, () => {
@@ -230,7 +230,7 @@ export class IndexPageTemplate extends React.Component
         })
       }
       else if (this.state.touchStart - 10 > event.touches[0].pageY) {
-        let section = (scrollWrapper.scrollTop + window.innerHeight - scrollWrapper.scrollTop % window.innerHeight) / window.innerHeight
+        let section = (scrollWrapper.scrollTop + ( window.innerHeight - 64 ) - scrollWrapper.scrollTop % ( window.innerHeight - 64 )) / ( window.innerHeight - 64 )
         this.setState({ scroll: true, touchStart: undefined, section })
         this.smoothScroll(window.innerHeight - scrollWrapper.scrollTop % window.innerHeight, scrollWrapper, () => {
           this.setState({ scroll: false })
@@ -249,16 +249,21 @@ export class IndexPageTemplate extends React.Component
         return
       }
       if (event.deltaY > 0) {
-        let section = (scrollWrapper.scrollTop + window.innerHeight - scrollWrapper.scrollTop % window.innerHeight) / window.innerHeight
+        let section = (scrollWrapper.scrollTop + ( window.innerHeight - 64 ) - scrollWrapper.scrollTop % ( window.innerHeight - 64 )) / ( window.innerHeight - 64 )
+        if (section === -1 || section === 3) {
+          return
+        }
         this.setState({ scroll: true, section })
-        this.smoothScroll(window.innerHeight - scrollWrapper.scrollTop % window.innerHeight, scrollWrapper, () => {
+        this.smoothScroll(( window.innerHeight - 64 ) - scrollWrapper.scrollTop % ( window.innerHeight - 64 ), scrollWrapper, () => {
           this.setState({ scroll: false })
         })
       }
       else {
-        let diff = 0 === scrollWrapper.scrollTop % window.innerHeight ? window.innerHeight : scrollWrapper.scrollTop % window.innerHeight
-        let section = (scrollWrapper.scrollTop - diff) / window.innerHeight
-        section = section === -1 ? 0 : section === 3 ? 2 : section
+        let diff = 0 === scrollWrapper.scrollTop % ( window.innerHeight - 64 ) ? ( window.innerHeight - 64 ) : scrollWrapper.scrollTop % ( window.innerHeight - 64 )
+        let section = (scrollWrapper.scrollTop - diff) / ( window.innerHeight - 64 )
+        if (section === -1 || section === 3) {
+          return
+        }
         this.setState({ scroll: true, section })
         this.smoothScroll(- diff, scrollWrapper, () => {
             this.setState({ scroll: false })
@@ -285,9 +290,9 @@ export class IndexPageTemplate extends React.Component
     if (scrollWrapper === null || this.state.scroll === true) {
       return
     }
-    var diff = target - this.state.section
+    var diff = this.state.section === undefined ? target : target - this.state.section
     this.setState({ scroll: true, section: target })
-    this.smoothScroll(window.innerHeight * diff, scrollWrapper, () => {
+    this.smoothScroll(( window.innerHeight - 64 ) * diff, scrollWrapper, () => {
       this.setState({ scroll: false })
     })
   }
@@ -303,11 +308,22 @@ export class IndexPageTemplate extends React.Component
         <Typography className='description'>description........</Typography>
       )
     ]
+    console.dir(section)
     return (
       <React.Fragment>
+        <div className='global-navigation'>
+          <div className='menu-item-box'>
+            {menuItemsProps.map(prop => 
+              <Typography className='menu-item'>{prop.label}</Typography>
+            )}
+          </div>
+          <div className='menu-open-button-box' onClick={this.handleClickMenubar}>
+            <Menu color='inherit'/>
+          </div>
+        </div>
         <div
           id='scroll-wrapper'
-          style={{ height: windowHeight }}
+          style={{ height: windowHeight - 64 }}
         >
         <MenuBarAnimation native state={menubar}>
           {({ x }) => (
@@ -317,12 +333,9 @@ export class IndexPageTemplate extends React.Component
                 className='content'
                 style={{
                   right: x.interpolate(x => `calc(${x / 2}vw)`),
-                  height: windowHeight
+                  height: windowHeight - 64
                 }}
               >
-                <div className='menu-open-button-box' onClick={this.handleClickMenubar}>
-                  <Menu color='inherit'/>
-                </div>
                 <div className='section-navigation'>
                   <div
                     className={`circle ${section === 0 || section === undefined ? 'selected' : ''}`}

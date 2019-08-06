@@ -8,8 +8,8 @@ body
 
   .left
     width: 50%
-    background-size: cover
     opacity: 1
+    background-position: center center
 
     .texture
       width: 100%
@@ -35,21 +35,6 @@ body
   position: relative
 
 
-.menu-open-button-box
-  position: fixed
-  top: 16px
-  right: 16px
-  width: 40px
-  height: 40px
-  padding: 8px
-  border-radius: 32px
-  display: flex
-  justify-content: center
-  align-items: center
-  background-color: white
-  cursor: pointer
-  z-index: 10
-  color: grey
 
 .menu-close-button-box
   position: absolute
@@ -95,14 +80,14 @@ body
 .section-navigation
   position: fixed
   right: 8px
-  bottom: 16px
+  bottom: 0px
   transform: translate(0, -50%)
   margin: auto
 
   .circle
     width: 6px
     height: 6px
-    margin: 16px 8px
+    margin: 8px 8px
     padding: 8px
     cursor: pointer
     background-size: 6px 6px
@@ -112,3 +97,52 @@ body
 .content
   position: absolute
   width: 100vw
+
+.global-navigation
+  top: 0px
+  left: 0px
+  height: 64px
+  width: 100vw
+  background-color: #ffffff
+  z-index: 10
+  display: flex
+  justify-content: flex-end
+  padding: 8px
+  box-sizing: border-box
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75)
+
+  .menu-item-box
+    display: flex
+    justify-content: center
+    align-items: center
+
+    .menu-item
+      margin: 0 8px
+
+
+  .menu-open-button-box
+    display: none
+    width: 40px
+    height: 40px
+    padding: 8px
+    border-radius: 32px
+    justify-content: center
+    align-items: center
+    background-color: white
+    cursor: pointer
+    z-index: 10
+    color: grey
+
+
+@media (max-width: 600px)
+  .global-navigation
+    .menu-open-button-box
+      display: block
+    .menu-item-box
+      display: none
+
+
+
+@keyframes zoomup
+  0% { background-size: 100% }
+  100% { background-size: 105% }
