@@ -3,6 +3,8 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import { Keyframes, animated } from 'react-spring/renderprops'
 import texture from '../img/line-texture-bg-overlay.svg'
+import circleSelected from '../img/section-navigation-circle-selected.svg'
+import circle from '../img/section-navigation-circle.svg'
 import { Menu, Close } from '@material-ui/icons'
 import { Typography, Grid } from '@material-ui/core';
 
@@ -24,7 +26,7 @@ const BackgroundImageAnimation = Keyframes.Spring({
 
 const TypographyAnimation = Keyframes.Trail({
   peek: { x: 0, from: { x: 100 }, delay: 0 },
-  open: { x: 0, from: { x: 100 }, delay: 1000 },
+  open: { x: 0, from: { x: 100 }, delay: 1500 },
   close: { to: { x: 100 }, from: { x: 0 }, delay: 0 },
 })
 
@@ -33,6 +35,18 @@ const menuItemsProps = [
   { en_label: 'OEM', label: 'OEM' },
   { en_label: 'Shop', label: '販売店' },
   { en_label: 'Recruit', label: '採用情報' },
+]
+
+const sectionProps = [
+  {
+    title: '社長挨拶'
+  },
+  {
+    title: '沿革'
+  },
+  {
+    title: 'TEST'
+  },
 ]
 
 const Menubar = (props) => {
@@ -122,7 +136,6 @@ const Section = (props) => {
             native
             items={typographyItems}
             keys={typographyItems.map((_, i) => i)}
-            reverse={section !== 0}
             state={currentSection === undefined && section === 0 ? 'peek' : currentSection === section ? 'open' : 'close'}
           >
             {(item, i) => ({ x, ...props }) => (
@@ -253,10 +266,8 @@ export class IndexPageTemplate extends React.Component
       }
     }
     window.onresize = (event) => {
-      console.dir(window.innerHeight)
       this.setState({ windowHeight: window.innerHeight })
     }
-    console.dir(window.innerHeight)
     this.setState({ windowHeight: window.innerHeight })
   }
 
@@ -269,6 +280,18 @@ export class IndexPageTemplate extends React.Component
     }
   }
 
+  handleClickSectionNavigation = (target) => () => {
+    var scrollWrapper = document.getElementById('scroll-wrapper')
+    if (scrollWrapper === null || this.state.scroll === true) {
+      return
+    }
+    var diff = target - this.state.section
+    this.setState({ scroll: true, section: target })
+    this.smoothScroll(window.innerHeight * diff, scrollWrapper, () => {
+      this.setState({ scroll: false })
+    })
+  }
+
   render() {
     const { menubar, menuItems, section, windowHeight } = this.state
     const { image1, image2, image3 } = this.props
@@ -277,7 +300,7 @@ export class IndexPageTemplate extends React.Component
         <Typography className='title'>TITLE</Typography>
       ),
       (
-        <Typography className='description'>description...................</Typography>
+        <Typography className='description'>description........</Typography>
       )
     ]
     return (
@@ -299,6 +322,29 @@ export class IndexPageTemplate extends React.Component
               >
                 <div className='menu-open-button-box' onClick={this.handleClickMenubar}>
                   <Menu color='inherit'/>
+                </div>
+                <div className='section-navigation'>
+                  <div
+                    className={`circle ${section === 0 || section === undefined ? 'selected' : ''}`}
+                    style={{
+                      backgroundImage: `url(${section === 0 || section === undefined ? circleSelected : circle})`,
+                    }}
+                    onClick={this.handleClickSectionNavigation(0)}
+                  />
+                  <div
+                    className={`circle ${section === 1 ? 'selected' : ''}`}
+                    style={{
+                      backgroundImage: `url(${section === 1 ? circleSelected : circle})`,
+                    }}
+                    onClick={this.handleClickSectionNavigation(1)}
+                  />
+                  <div
+                    className={`circle ${section === 2 ? 'selected' : ''}`}
+                    style={{
+                      backgroundImage: `url(${section === 2 ? circleSelected : circle})`,
+                    }}
+                    onClick={this.handleClickSectionNavigation(2)}
+                  />
                 </div>
                 <Section
                   section={0}
