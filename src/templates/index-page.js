@@ -6,7 +6,8 @@ import texture from '../img/line-texture-bg-overlay.svg'
 import circleSelected from '../img/section-navigation-circle-selected.svg'
 import circle from '../img/section-navigation-circle.svg'
 import { Menu, Close } from '@material-ui/icons'
-import { Typography, Grid } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core'
+import Layout from '../components/Layout'
 
 const MenuBarAnimation = Keyframes.Spring({
   open: { delay: 0, x: 100 },
@@ -25,9 +26,9 @@ const BackgroundImageAnimation = Keyframes.Spring({
 })
 
 const TypographyAnimation = Keyframes.Trail({
-  peek: { x: 0, from: { x: 100 }, delay: 0 },
-  open: { x: 0, from: { x: 100 }, delay: 1500 },
-  close: { to: { x: 100 }, from: { x: 0 }, delay: 0 },
+  peek: { to: { x: 0, opacity: 100 }, from: { x: 100, opacity: 100 }, delay: 0 },
+  open: { to: { x: 0, opacity: 100 }, from: { x: 100, opacity: 100 }, delay: 1500 },
+  close: { x: 100, opacity: 0, from: { x: 100, opacity: 0 }, delay: 0 },
 })
 
 const menuItemsProps = [
@@ -136,12 +137,17 @@ const Section = (props) => {
             native
             items={typographyItems}
             keys={typographyItems.map((_, i) => i)}
-            state={currentSection === undefined && section === 0 ? 'peek' : currentSection === section ? 'open' : 'close'}
+            state={currentSection === undefined ? 'peek' : currentSection === section ? 'open' : 'close'}
           >
-            {(item, i) => ({ x, ...props }) => (
+            {(item, i) => ({ x, opacity, ...props }) => (
               <div style={{ overflow: 'hidden' }}>
                 <animated.div
-                  style={{ transform: x.interpolate(x => `translateY(${x}%)`) }}
+                  style={{
+                    transform: x.interpolate(x => `translateY(${x}%)`),
+                    opacity: opacity.interpolate(opacity => { 
+                      return Math.ceil(( opacity / 100 ) * 100) / 100
+                    })
+                  }}
                   key={i}
                   className='typography'
                 >
@@ -302,15 +308,14 @@ export class IndexPageTemplate extends React.Component
     const { image1, image2, image3 } = this.props
     const typographyItems = [
       (
-        <Typography className='title'>TITLE</Typography>
+        <Typography className='title'>タイトル</Typography>
       ),
       (
-        <Typography className='description'>description........</Typography>
+        <Typography className='description'>ああああああああああああ<br/>あああああああああああああ<br/>あああああああああああああ<br/>あああああああああああああ<br/></Typography>
       )
     ]
-    console.dir(section)
     return (
-      <React.Fragment>
+      <Layout>
         <div className='global-navigation'>
           <div className='menu-item-box'>
             {menuItemsProps.map(prop => 
@@ -385,7 +390,7 @@ export class IndexPageTemplate extends React.Component
           )}
         </MenuBarAnimation>
         </div>
-      </React.Fragment>
+      </Layout>
     )
   }
 }
